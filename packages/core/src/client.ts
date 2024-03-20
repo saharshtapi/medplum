@@ -2668,6 +2668,17 @@ export class MedplumClient extends EventTarget {
     if (urlString.startsWith(BINARY_URL_PREFIX)) {
       url = this.fhirUrl(urlString);
     }
+
+    let headers = options.headers as Record<string, string> | undefined;
+    if (!headers) {
+      headers = {};
+      options.headers = headers;
+    }
+
+    if (!headers['Accept']) {
+      headers['Accept'] = '*/*';
+    }
+
     this.addFetchOptionsDefaults(options);
     const response = await this.fetchWithRetry(url.toString(), options);
     return response.blob();
